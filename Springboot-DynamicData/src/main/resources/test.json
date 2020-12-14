@@ -1,0 +1,21 @@
+{
+  "remark": "",
+  "isnormalize": true,
+  "clientname": "MinApp",
+  "taskid": 0,
+  "recyclepointid": 6,
+  "recyclepointname": "名称",
+  "collectiondate": "2020-05-01 00:00:00",
+  "rubbishCollectionDetails": [
+    {
+      "smallclassid": "59c1067e-59d9-425a-adb6-699e8fc7fc2b",
+      "smallclassname": "",
+      "bigclassid": "59c1067e-59d9-425a-adb6-699e8fc7fc2b",
+      "bigclassname": "",
+      "estimatecapacity": 360,
+      "estimateweight": "01",
+      "gpsweight": 0
+    }
+  ],
+  "imgids": ""
+}

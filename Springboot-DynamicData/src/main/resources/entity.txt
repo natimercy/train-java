@@ -1,0 +1,40 @@
+@ApiModelProperty("源头类型：1:小区;2:城中村,3:公园,4:集贸市场,5:单位,6:酒店,7:小门店,8:其他")
+private Integer sourceType;
+
+@ApiModelProperty("名称")
+private String name;
+
+@ApiModelProperty("居民户数")
+private Integer jmfsCount;
+
+@ApiModelProperty("投放点平均覆盖户数")
+private Integer pointCoverPerson;
+
+@ApiModelProperty("投放点平均覆盖户数")
+private Integer pointCoverPerson;
+
+@ApiModelProperty("督导记录")
+private Integer supervisorRecordCount;
+
+@ApiModelProperty("纬度")
+private Double geoY;
+
+@ApiModelProperty("图标状态：预留")
+private Integer iconType;
+
+private Integer pointCount;
+
+private Integer pointCoverLv;
+
+@ApiModelProperty("投放点ID")
+private String refuseClassifyPointId;
+
+@ApiModelProperty("投放点ID")
+private String refuseClassifyPointId;
+
+@ApiModelProperty("投放点")
+private String sourceId;
+
+@ApiModelProperty("经度")
+private Double geoX;
+
