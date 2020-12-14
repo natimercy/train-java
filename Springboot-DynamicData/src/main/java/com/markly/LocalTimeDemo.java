@@ -9,6 +9,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.SecureRandom;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
@@ -28,7 +29,7 @@ public class LocalTimeDemo {
     private static final String FIX_CONDITION = "where 1 = 1 and c_name like '%%%s%%'";
 
     public static void main(String[] args) {
-        getFields(SysUserServiceImpl.class);
+
 
     }
 
