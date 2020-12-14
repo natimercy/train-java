@@ -3,14 +3,11 @@ package com.markly;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.markly.entity.SysUser;
 import com.markly.service.SysUserService;
-import com.markly.service.impl.SysUserServiceImpl;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.security.SecureRandom;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -22,14 +19,8 @@ import java.util.stream.Stream;
  */
 public class LocalTimeDemo {
 
-    private String test;
-
-    static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    private static final String FIX_CONDITION = "where 1 = 1 and c_name like '%%%s%%'";
 
     public static void main(String[] args) {
-
 
     }
 
