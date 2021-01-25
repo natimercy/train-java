@@ -2,6 +2,7 @@ package org.example;
 
 import com.mysql.cj.MysqlType;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.example.entity.TableInfo;
 import org.example.util.Executor;
 
@@ -34,10 +35,11 @@ public class MybatisGenerateApplicationByProcedure {
     /**
      * 存储过程名称
      */
-    private final String procedure = "p_map_garbage_front_stat_supervisor_record_details_info";
+    private final String procedure = "p_map_garbage_transport_car_transport_record";
+
+    private final String classNamePrefix = "customize";
 
     private final String line = System.getProperty("line.separator");
-
 
     public static void main(String[] args) {
         new MybatisGenerateApplicationByProcedure().execute();
@@ -67,8 +69,10 @@ public class MybatisGenerateApplicationByProcedure {
      * @throws IOException IOException
      */
     private void outPutEntityFile(List<TableInfo> entityInfoList) throws IOException {
-        for (TableInfo entityInfo : entityInfoList) {
-            String path = entityFilePath + entityInfo.getClassName() + ".txt";
+
+        for (int i = 0; i < entityInfoList.size(); i++) {
+            TableInfo entityInfo = entityInfoList.get(i);
+            String path = entityFilePath + generateClassName(entityInfo.getClassName(), i) + ".txt";
             FileWriter fileWriter = new FileWriter(createFile(path));
             List<String> fieldNames = entityInfo.getFieldNames();
             Map<String, MysqlType> mysqlType = entityInfo.getFieldRelationMysqlType();
@@ -78,8 +82,8 @@ public class MybatisGenerateApplicationByProcedure {
                 int index = className.lastIndexOf(".");
                 String javaType = className.substring(index + 1);
 
-                fileWriter.write("@ApiModelProperty(\"\");" + line);
-                fileWriter.write("private " + javaType + " " + fieldName + line + line);
+                fileWriter.write("@ApiModelProperty(\"\")" + line);
+                fileWriter.write("private " + javaType + " " + fieldName + ";" + line + line);
             }
             IOUtils.closeQuietly(fileWriter);
         }
@@ -94,8 +98,9 @@ public class MybatisGenerateApplicationByProcedure {
      * @throws IOException IOException
      */
     private void outPutMapperFile(List<TableInfo> entityInfoList) throws IOException {
-        for (TableInfo entityInfo : entityInfoList) {
-            String path = xmlFilePath + entityInfo.getClassName() + "Mapper" + ".xml";
+        for (int i = 0; i < entityInfoList.size(); i++) {
+            TableInfo entityInfo = entityInfoList.get(i);
+            String path = xmlFilePath + generateClassName(entityInfo.getClassName(), i) + "Mapper" + ".xml";
             FileWriter fileWriter = new FileWriter(createFile(path));
             String className = entityInfo.getClassName();
             fileWriter.write("<resultMap id=\"" + className + "\" type=\"" + className + "\">" + line);
@@ -109,6 +114,14 @@ public class MybatisGenerateApplicationByProcedure {
             fileWriter.write("</resultMap>");
             IOUtils.closeQuietly(fileWriter);
         }
+    }
+
+    public String generateClassName(String originalClassName, int index) {
+        if (StringUtils.isNotEmpty(originalClassName)) {
+            return originalClassName;
+        }
+
+        return classNamePrefix + index;
     }
 
     @SuppressWarnings("all")

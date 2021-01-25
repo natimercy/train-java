@@ -4,15 +4,17 @@ import com.mysql.cj.MysqlType;
 import com.mysql.cj.jdbc.result.ResultSetImpl;
 import com.mysql.cj.protocol.ColumnDefinition;
 import com.mysql.cj.result.Field;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+import org.example.ParameterPostProcessor;
+import org.example.annotation.ParameterName;
 import org.example.entity.ProcedureParameter;
 import org.example.entity.TableInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -163,7 +165,7 @@ public class Executor {
                 if (classes.contains(mysqlType.getClassName())) {
                     builder.append(defaultValue).append(",");
                 } else {
-                    builder.append(getNull()).append(",");
+                    builder.append(procedureParameter.getValue()).append(",");
                 }
             }
         });

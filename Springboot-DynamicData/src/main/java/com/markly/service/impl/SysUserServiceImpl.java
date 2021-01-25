@@ -30,8 +30,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @TargetDataSource(name = DataSourceNames.SECOND)
     @Override
     public SysUser findUserBySecondDb(long id) {
-
         return this.baseMapper.selectById(id);
     }
 
+    @Override
+    public String getName(Long id) {
+        return baseMapper.getName(id);
+    }
 }

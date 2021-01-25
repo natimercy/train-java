@@ -21,4 +21,6 @@ public class ProcedureParameter {
 
     private String dataType;
 
+    private Object value;
+
 }

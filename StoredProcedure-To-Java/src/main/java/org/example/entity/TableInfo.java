@@ -29,6 +29,8 @@ public class TableInfo {
 
     private Map<String, String> fieldRelationColumns = new HashMap<>();
 
+    private Map<String, Object> columnRelationValue = new HashMap<>();
+
     @Override
     public String toString() {
         return "EntityInfo{" +

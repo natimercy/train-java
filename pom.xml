@@ -12,6 +12,7 @@
         <module>Springboot-DynamicData</module>
         <module>Cache-And-DistributedCache</module>
         <module>StoredProcedure-To-Java</module>
+        <module>spring-clound-config-server</module>
     </modules>
 
     <parent>

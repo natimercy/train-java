@@ -15,4 +15,5 @@ public interface SysUserService extends IService<SysUser> {
 
     SysUser findUserBySecondDb(long id);
 
+    String getName(Long id);
 }

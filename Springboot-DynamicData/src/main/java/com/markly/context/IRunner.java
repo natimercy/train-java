@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 /**
  * @author hq
  * @date 2020-11-20
@@ -19,7 +21,7 @@ public class IRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("1111111111111");
+        System.out.println("1111111111111" + Arrays.toString(args));
         System.out.println(sysUserService.findUserByFirstDb(1L));
     }
 

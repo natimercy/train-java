@@ -1,4 +1,3 @@
-/*
 package com.markly;
 
 import com.markly.datasource.DataSourceAspect;
@@ -32,12 +31,11 @@ public class DynamicDSTests {
 
     @Test
     public void test() {
-        // localhost:3306/ds0
-        SysUser user = userService.findUserByFirstDb(1);
-        logger.info("第一个数据库 : [{}]", user.toString());
         // localhost:3306/ds1
         SysUser user2 = userService.findUserBySecondDb(2);
         logger.info("第二个数据库 : [{}]", user2.toString());
+        // localhost:3306/ds0
+        SysUser user = userService.findUserByFirstDb(1);
+        logger.info("第一个数据库 : [{}]", user);
     }
 }
-*/
