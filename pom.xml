@@ -12,7 +12,8 @@
         <module>Springboot-DynamicData</module>
         <module>Cache-And-DistributedCache</module>
         <module>StoredProcedure-To-Java</module>
-        <module>spring-clound-config-server</module>
+        <module>spring-cloud-config-server</module>
+        <module>spring-cloud-gateway</module>
     </modules>
 
     <parent>
@@ -23,7 +24,7 @@
     </parent>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>1.1</java.version>
     </properties>
 
     <dependencies>
