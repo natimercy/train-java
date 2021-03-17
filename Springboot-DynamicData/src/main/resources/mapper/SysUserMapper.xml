@@ -4,7 +4,11 @@
 
 
     <select id="getName" resultType="java.lang.String">
-        select username from sys_user where id = #{id};
+        select username from sys_user where user_id = #{0};
     </select>
+
+    <insert id="getName" useGeneratedKeys="true" keyProperty="id" keyColumn="c_id" >
+
+    </insert>
 
 </mapper>

@@ -29,21 +29,24 @@ public class SysUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "user_id", type = IdType.AUTO)
-    private String userId;
+    private Long userId;
 
     @TableField(value = "username")
     @ApiModelProperty(value = "用户名")
     private String username;
 
     @ApiModelProperty(value = "密码")
+    @TableField(value = "password")
     private String password;
 
     @ApiModelProperty(value = "盐")
     private String salt;
 
+    @TableField(value = "email")
     @ApiModelProperty(value = "邮箱")
     private String email;
 
+    @TableField(value = "mobile")
     @ApiModelProperty(value = "手机号")
     private String mobile;
 

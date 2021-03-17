@@ -35,7 +35,7 @@ public class DynamicDataSourceController {
 
     @PostMapping("/insert")
     public Boolean getName(@RequestBody SysUser sysUser) {
-        sysUser.setUserId(UUID.randomUUID().toString());
+        sysUser.setUsername(UUID.randomUUID().toString());
         return sysUserService.save(sysUser);
     }
 

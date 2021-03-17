@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
-    String getName(@Param("id") Long id);
+    String getName(Long id);
 
 }
