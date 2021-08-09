@@ -2,6 +2,8 @@ package com.markly.controller;
 
 import com.markly.entity.SysUser;
 import com.markly.service.SysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +15,14 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/user")
+@Api("/1111")
 public class DynamicDataSourceController {
 
-    @Autowired
     private SysUserService sysUserService;
+
+    public DynamicDataSourceController(SysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
 
     @GetMapping("/selectFirst/{id}")
     public SysUser selectFirst(@PathVariable(name = "id") Long id) {

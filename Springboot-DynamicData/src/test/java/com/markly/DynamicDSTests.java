@@ -38,4 +38,5 @@ public class DynamicDSTests {
         SysUser user = userService.findUserByFirstDb(1);
         logger.info("第一个数据库 : [{}]", user);
     }
+
 }

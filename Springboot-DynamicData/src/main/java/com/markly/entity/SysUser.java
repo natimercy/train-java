@@ -1,8 +1,7 @@
 package com.markly.entity;
 
-import java.time.LocalDateTime;
-import java.io.Serializable;
-
+import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
+import cn.org.atool.fluent.mybatis.base.IEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -13,6 +12,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
  * <p>
  * 系统用户
@@ -22,7 +24,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="SysUser对象", description="系统用户")
+@ApiModel(value = "SysUser对象", description = "系统用户")
 @ToString
 public class SysUser implements Serializable {
 

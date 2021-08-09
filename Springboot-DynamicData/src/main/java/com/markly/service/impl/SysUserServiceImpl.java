@@ -6,6 +6,7 @@ import com.markly.datasource.DataSourceNames;
 import com.markly.datasource.TargetDataSource;
 import com.markly.entity.SysUser;
 import com.markly.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+    @Autowired
+    private TestServiceImpl testService;
 
     /**
      * 在切面中，如果没有指定，就使用第一个数据源
