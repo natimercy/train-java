@@ -1,6 +1,5 @@
 package com.markly;
 
-import com.markly.condition.WindowsCondition;
 import com.markly.datasource.DynamicDataSourceConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +9,6 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +40,6 @@ public class ThinkInSpringBootApplication {
         return "message：" + message;
     }
 
-    @Conditional({WindowsCondition.class})
     @Bean
     @EventListener(ApplicationListener.class)
     public String message() {
