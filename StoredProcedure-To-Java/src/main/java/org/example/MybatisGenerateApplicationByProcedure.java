@@ -5,12 +5,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.example.entity.TableInfo;
 import org.example.util.Executor;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * 启动类
@@ -32,25 +32,26 @@ public class MybatisGenerateApplicationByProcedure {
      */
     private final String xmlFilePath = path;
 
-    /**
-     * 存储过程名称
-     */
-    private final String procedure = "p_map_garbage_transport_car_transport_record";
-
     private final String classNamePrefix = "customize";
 
     private final String line = System.getProperty("line.separator");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new MybatisGenerateApplicationByProcedure().execute();
     }
 
-    private void execute() {
-        List<TableInfo> entityInfoList = new Executor().getEntityList(procedure);
+    private void execute() throws IOException {
+        Properties properties = getProperties();
+
+        List<TableInfo> entityInfoList = new Executor(properties).getEntityList(properties.getProperty("procedure"));
 
         System.out.println(entityInfoList);
 
         outPutFile(entityInfoList);
+    }
+
+    private Properties getProperties() throws IOException {
+        return PropertiesLoaderUtils.loadAllProperties("config.properties");
     }
 
     private void outPutFile(List<TableInfo> entityInfoList) {
@@ -69,7 +70,6 @@ public class MybatisGenerateApplicationByProcedure {
      * @throws IOException IOException
      */
     private void outPutEntityFile(List<TableInfo> entityInfoList) throws IOException {
-
         for (int i = 0; i < entityInfoList.size(); i++) {
             TableInfo entityInfo = entityInfoList.get(i);
             String path = entityFilePath + generateClassName(entityInfo.getClassName(), i) + ".txt";

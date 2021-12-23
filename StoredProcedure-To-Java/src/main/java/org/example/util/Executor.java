@@ -13,9 +13,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -38,7 +36,9 @@ public class Executor {
 
     private final String mode = "IN";
 
-    public Executor() {
+    private DBManager dbManager;
+
+    public Executor(Properties properties) {
         classes.add(Integer.class.getName());
         classes.add(int.class.getName());
         classes.add(Long.class.getName());
@@ -48,6 +48,8 @@ public class Executor {
         classes.add(float.class.getName());
         classes.add(Double.class.getName());
         classes.add(double.class.getName());
+
+        this.dbManager = new DBManager(properties);
     }
 
     /**
@@ -65,7 +67,7 @@ public class Executor {
         String sql = builderSql(procedure, parameters);
         System.out.println(sql);
         try {
-            cs = DBUtils.getInstance().getConnection().prepareCall(sql);
+            cs = dbManager.getConnection().prepareCall(sql);
             cs.execute();
 
             ResultSetImpl resultSet = (ResultSetImpl) cs.getResultSet();
@@ -104,10 +106,10 @@ public class Executor {
      */
     private List<ProcedureParameter> getProcedureParameters(String procedure) {
         List<ProcedureParameter> parameters = new LinkedList<>();
-        String sql = String.format(procedureInformationSQL, DBUtils.getInstance().getDatabase(), procedure);
+        String sql = String.format(procedureInformationSQL, dbManager.getDatabase(), procedure);
         PreparedStatement ps;
         try {
-            ps = DBUtils.getInstance().getConnection().prepareStatement(sql);
+            ps = dbManager.getConnection().prepareStatement(sql);
             ResultSetImpl resultSet = (ResultSetImpl) ps.executeQuery();
 
             while (resultSet.next()) {
