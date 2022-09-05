@@ -1,12 +1,12 @@
-package org.example.util;
+package org.example.nacos.util;
 
 import com.mysql.cj.MysqlType;
 import com.mysql.cj.jdbc.result.ResultSetImpl;
 import com.mysql.cj.protocol.ColumnDefinition;
 import com.mysql.cj.result.Field;
 import org.apache.commons.lang3.StringUtils;
-import org.example.entity.ProcedureParameter;
-import org.example.entity.TableInfo;
+import org.example.nacos.entity.ProcedureParameter;
+import org.example.nacos.entity.TableInfo;
 import org.springframework.util.ReflectionUtils;
 
 import java.sql.CallableStatement;

@@ -19,6 +19,7 @@
 
     <modules>
         <module>dubbo-spring-cloud-demo</module>
+        <module>nacos-spring-cloud-demo</module>
     </modules>
 
 </project>

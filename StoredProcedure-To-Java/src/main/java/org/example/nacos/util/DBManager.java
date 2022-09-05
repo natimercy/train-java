@@ -1,4 +1,4 @@
-package org.example.util;
+package org.example.nacos.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

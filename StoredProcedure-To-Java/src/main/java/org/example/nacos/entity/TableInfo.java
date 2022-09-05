@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.nacos.entity;
 
 import com.mysql.cj.MysqlType;
 import lombok.Data;

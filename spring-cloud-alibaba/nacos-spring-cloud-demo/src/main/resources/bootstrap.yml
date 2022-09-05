@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: nacos-example
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.101:8848
+        file-extension: yaml
+      discovery:
+        server-addr: 192.168.0.101:8848
+        heart-beat-interval: 5
+        heart-beat-timeout: 15
+        ip-delete-timeout: 30

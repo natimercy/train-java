@@ -1,10 +1,10 @@
-package org.example;
+package org.example.nacos;
 
 import com.mysql.cj.MysqlType;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.example.entity.TableInfo;
-import org.example.util.Executor;
+import org.example.nacos.entity.TableInfo;
+import org.example.nacos.util.Executor;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.io.*;
