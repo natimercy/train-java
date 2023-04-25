@@ -17,6 +17,7 @@
         <module>spring-cloud-alibaba</module>
         <module>smpleJDBC-spring-boot-start</module>
         <module>spring-cloud</module>
+        <module>spring-retry</module>
     </modules>
 
     <parent>
