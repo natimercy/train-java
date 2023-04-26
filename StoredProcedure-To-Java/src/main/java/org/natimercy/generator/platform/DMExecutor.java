@@ -1,36 +1,38 @@
-package org.example.nacos.util;
+package org.natimercy.generator.platform;
 
 import com.mysql.cj.MysqlType;
-import com.mysql.cj.jdbc.result.ResultSetImpl;
-import com.mysql.cj.protocol.ColumnDefinition;
-import com.mysql.cj.result.Field;
 import org.apache.commons.lang3.StringUtils;
-import org.example.nacos.entity.ProcedureParameter;
-import org.example.nacos.entity.TableInfo;
+import org.natimercy.generator.enums.JavaType;
+import org.natimercy.generator.util.DBManager;
+import org.natimercy.generator.entity.ProcedureParameter;
+import org.natimercy.generator.entity.TableMetaData;
 import org.springframework.util.ReflectionUtils;
 
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.lang.reflect.Field;
+import java.sql.*;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
- * @author hq
- * @date 2020-12-08
+ * （达梦）DMExecutor
+ *
+ * @author qian.he
+ * @since 2023-04-25
+ * @version 1.0.0
  */
-public class Executor {
+public class DMExecutor {
+
+    private final String procedureInformationSQL =
+            "select a.NAME                                              as parameterName, " +
+                    " (case a.INFO1 when 0 then 'IN' when 1 then 'OUT' " +
+                    "               when 2 then 'INOUT' else 'IN' end) as parameterMode, " +
+                    "       a.TYPE$                                    as dataType " +
+                    "from syscolumns a " +
+                    "         inner join dba_objects b on a.id = b.object_id " +
+                    "where OWNER = '%s' " +
+                    "  and OBJECT_NAME = '%s' " +
+                    "order by a.COLID asc;";
 
     private final List<String> classes = new ArrayList<>();
-
-    private final String procedureInformationSQL = "SELECT " +
-            "       SPECIFIC_SCHEMA as specificSchema," +
-            "       SPECIFIC_NAME   as specificName," +
-            "       PARAMETER_MODE  as parameterMode," +
-            "       PARAMETER_NAME  as parameterName," +
-            "       DATA_TYPE       as dataType" +
-            " from information_schema.PARAMETERS where SPECIFIC_SCHEMA = '%s' and SPECIFIC_NAME = '%s'; ";
 
     private final int defaultValue = 1;
 
@@ -38,7 +40,7 @@ public class Executor {
 
     private DBManager dbManager;
 
-    public Executor(Properties properties) {
+    public DMExecutor(Properties properties) {
         classes.add(Integer.class.getName());
         classes.add(int.class.getName());
         classes.add(Long.class.getName());
@@ -58,39 +60,46 @@ public class Executor {
      * @param procedure 存储过程名称
      * @return EntityInfo 集合
      */
-    public List<TableInfo> getEntityList(String procedure) {
-        List<TableInfo> entityList = new ArrayList<>();
+    public List<TableMetaData> getEntityList(String procedure) {
+        List<TableMetaData> entityList = new ArrayList<>();
 
         List<ProcedureParameter> parameters = getProcedureParameters(procedure);
 
         CallableStatement cs;
         String sql = builderSql(procedure, parameters);
-        System.out.println(sql);
+        System.out.println("sql: " + sql);
         try {
             cs = dbManager.getConnection().prepareCall(sql);
             cs.execute();
 
-            ResultSetImpl resultSet = (ResultSetImpl) cs.getResultSet();
-            while (resultSet != null) {
-                TableInfo entityInfo = new TableInfo();
-                ColumnDefinition metadata = resultSet.getMetadata();
-                Field[] fields = metadata.getFields();
-                if (fields.length == 0) {
-                    break;
+            boolean next = true;
+            do {
+                if (next) {
+                    ResultSet resultSet = cs.getResultSet();
+                    while (resultSet.next()) {
+                        TableMetaData entityInfo = new TableMetaData();
+                        ResultSetMetaData metadata = resultSet.getMetaData();
+                        int columnCount = metadata.getColumnCount();
+                        if (columnCount <= 0) {
+                            break;
+                        }
+
+                        for (int i = 1; i <= columnCount; i++) {
+                            String columnName = metadata.getColumnName(i);
+                            entityInfo.setClassName(tableNameConverterClassName(columnName));
+                            entityInfo.getColumnNames().add(columnName.toLowerCase());
+                            String javaField = columnConverterField(columnName.toLowerCase());
+                            entityInfo.getFieldNames().add(javaField);
+                            int type = metadata.getColumnType(i);
+                            entityInfo.getFieldRelationMysqlType().put(javaField, MysqlType.getByJdbcType(type));
+                            entityInfo.getFieldRelationColumns().put(javaField, columnName);
+                            entityList.add(entityInfo);
+                        }
+                    }
                 }
 
-                entityInfo.setClassName(tableNameConverterClassName(fields[0].getTableName()));
-                Stream.of(fields).forEach(field -> {
-                    entityInfo.getColumnNames().add(field.getColumnLabel());
-                    String javaField = columnConverterField(field.getColumnLabel());
-                    entityInfo.getFieldNames().add(javaField);
-                    entityInfo.getFieldRelationMysqlType().put(javaField, field.getMysqlType());
-                    entityInfo.getFieldRelationColumns().put(javaField, field.getColumnLabel());
-                });
-                entityList.add(entityInfo);
-
-                resultSet = (ResultSetImpl) resultSet.getNextResultset();
-            }
+                next = cs.getMoreResults();
+            } while (next);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -107,32 +116,32 @@ public class Executor {
     private List<ProcedureParameter> getProcedureParameters(String procedure) {
         List<ProcedureParameter> parameters = new LinkedList<>();
         String sql = String.format(procedureInformationSQL, dbManager.getDatabase(), procedure);
+        System.out.println(sql);
         PreparedStatement ps;
         try {
             ps = dbManager.getConnection().prepareStatement(sql);
-            ResultSetImpl resultSet = (ResultSetImpl) ps.executeQuery();
+            ResultSet resultSet = ps.executeQuery();
 
-            while (resultSet.next()) {
-                ResultSetMetaData metaData = resultSet.getMetaData();
-                int columnCount = metaData.getColumnCount();
-
-                java.lang.reflect.Field[] fields = ProcedureParameter.class.getDeclaredFields();
-
-                ProcedureParameter parameter = new ProcedureParameter();
-                for (int i = 1; i <= columnCount; i++) {
-                    String columnLabel = metaData.getColumnLabel(i);
-                    for (java.lang.reflect.Field field : fields) {
-                        String fieldName = field.getName();
-                        if (fieldName.equals(columnLabel)) {
-                            String value = resultSet.getString(columnLabel);
+            if (Objects.nonNull(resultSet)) {
+                while (resultSet.next()) {
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    Field[] fields = ProcedureParameter.class.getDeclaredFields();
+                    ProcedureParameter parameter = new ProcedureParameter();
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnLabel = metaData.getColumnLabel(i);
+                        Optional<Field> existOptional = Arrays.stream(fields)
+                                .filter(field -> field.getName().equalsIgnoreCase(columnLabel))
+                                .findFirst();
+                        if (existOptional.isPresent()) {
+                            Field field = existOptional.get();
+                            Object value = resultSet.getObject(i);
                             ReflectionUtils.makeAccessible(field);
                             ReflectionUtils.setField(field, parameter, value);
-                            break;
                         }
                     }
+                    parameters.add(parameter);
                 }
-
-                parameters.add(parameter);
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -156,13 +165,25 @@ public class Executor {
             return builder.toString();
         }
 
-        builder.append("Call ").append(procedure).append("(");
+        builder.append("Call ").append(dbManager.getDatabase()).append(".").append(procedure).append("(");
+
         procedureParameters.forEach(procedureParameter -> {
             String parameterMode = procedureParameter.getParameterMode();
             if (mode.equalsIgnoreCase(parameterMode)) {
                 String dataType = procedureParameter.getDataType();
                 MysqlType mysqlType = MysqlType.getByName(dataType);
-                if (classes.contains(mysqlType.getClassName())) {
+                Optional<JavaType> optional = Arrays.stream(JavaType.values())
+                        .filter(javaType -> {
+                            String[] simpleClasses = javaType.getSimpleClasses();
+                            for (String simpleClass : simpleClasses) {
+                                if (simpleClass.equalsIgnoreCase(mysqlType.getClassName())) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        })
+                        .findFirst();
+                if (optional.isPresent()) {
                     builder.append(defaultValue).append(",");
                 } else {
                     builder.append(procedureParameter.getValue()).append(",");
@@ -216,5 +237,6 @@ public class Executor {
     public String changedFirstLowerCase(String target) {
         return target.substring(0, 1).toLowerCase() + target.substring(1);
     }
+
 
 }

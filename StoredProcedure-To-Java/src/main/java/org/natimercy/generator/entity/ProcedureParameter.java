@@ -1,4 +1,4 @@
-package org.example.nacos.entity;
+package org.natimercy.generator.entity;
 
 import lombok.Data;
 
@@ -11,14 +11,25 @@ import lombok.Data;
 @Data
 public class ProcedureParameter {
 
+    /**
+     * 过程名称
+     */
+    private String procedure;
+
     private String specificSchema;
 
     private String specificName;
 
     private String parameterMode;
 
+    /**
+     * 参数名称
+     */
     private String parameterName;
 
+    /**
+     * 参数名称
+     */
     private String dataType;
 
     private Object value;

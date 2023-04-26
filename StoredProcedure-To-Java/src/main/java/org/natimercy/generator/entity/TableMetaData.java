@@ -1,4 +1,4 @@
-package org.example.nacos.entity;
+package org.natimercy.generator.entity;
 
 import com.mysql.cj.MysqlType;
 import lombok.Data;
@@ -11,11 +11,12 @@ import java.util.Map;
 /**
  * 表信息，关联到当前字段信息
  *
- * @author hq
+ * @author natimercy
  * @date 2020-12-07
+ * @version 2.0.0
  */
 @Data
-public class TableInfo {
+public class TableMetaData {
 
     private String dbName;
 

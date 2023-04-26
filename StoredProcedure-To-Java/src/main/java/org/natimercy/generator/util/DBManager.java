@@ -1,4 +1,4 @@
-package org.example.nacos.util;
+package org.natimercy.generator.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

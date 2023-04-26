@@ -1,10 +1,10 @@
-package org.example.nacos;
+package org.natimercy.generator;
 
 import com.mysql.cj.MysqlType;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.example.nacos.entity.TableInfo;
-import org.example.nacos.util.Executor;
+import org.natimercy.generator.entity.TableMetaData;
+import org.natimercy.generator.platform.DMExecutor;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.io.*;
@@ -18,7 +18,7 @@ import java.util.Properties;
  * @author hq
  * @date 2020-12-08
  */
-public class MybatisGenerateApplicationByProcedure {
+public class CustomizerGenerateApplicationByProcedure {
 
     private final String path = System.getProperty("user.dir") + "/generator-files/";
 
@@ -37,13 +37,13 @@ public class MybatisGenerateApplicationByProcedure {
     private final String line = System.getProperty("line.separator");
 
     public static void main(String[] args) throws IOException {
-        new MybatisGenerateApplicationByProcedure().execute();
+        new CustomizerGenerateApplicationByProcedure().execute();
     }
 
     private void execute() throws IOException {
         Properties properties = getProperties();
 
-        List<TableInfo> entityInfoList = new Executor(properties).getEntityList(properties.getProperty("procedure"));
+        List<TableMetaData> entityInfoList = new DMExecutor(properties).getEntityList(properties.getProperty("procedure"));
 
         System.out.println(entityInfoList);
 
@@ -54,7 +54,7 @@ public class MybatisGenerateApplicationByProcedure {
         return PropertiesLoaderUtils.loadAllProperties("config.properties");
     }
 
-    private void outPutFile(List<TableInfo> entityInfoList) {
+    private void outPutFile(List<TableMetaData> entityInfoList) {
         try {
             outPutEntityFile(entityInfoList);
             outPutMapperFile(entityInfoList);
@@ -69,9 +69,9 @@ public class MybatisGenerateApplicationByProcedure {
      * @param entityInfoList entityInfoList
      * @throws IOException IOException
      */
-    private void outPutEntityFile(List<TableInfo> entityInfoList) throws IOException {
+    private void outPutEntityFile(List<TableMetaData> entityInfoList) throws IOException {
         for (int i = 0; i < entityInfoList.size(); i++) {
-            TableInfo entityInfo = entityInfoList.get(i);
+            TableMetaData entityInfo = entityInfoList.get(i);
             String path = entityFilePath + generateClassName(entityInfo.getClassName(), i) + ".txt";
             FileWriter fileWriter = new FileWriter(createFile(path));
             List<String> fieldNames = entityInfo.getFieldNames();
@@ -97,9 +97,9 @@ public class MybatisGenerateApplicationByProcedure {
      * @param entityInfoList entityInfoList
      * @throws IOException IOException
      */
-    private void outPutMapperFile(List<TableInfo> entityInfoList) throws IOException {
+    private void outPutMapperFile(List<TableMetaData> entityInfoList) throws IOException {
         for (int i = 0; i < entityInfoList.size(); i++) {
-            TableInfo entityInfo = entityInfoList.get(i);
+            TableMetaData entityInfo = entityInfoList.get(i);
             String path = xmlFilePath + generateClassName(entityInfo.getClassName(), i) + "Mapper" + ".xml";
             FileWriter fileWriter = new FileWriter(createFile(path));
             String className = entityInfo.getClassName();

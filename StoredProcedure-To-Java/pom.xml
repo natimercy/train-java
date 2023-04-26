@@ -17,10 +17,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <lombok.version>1.18.12</lombok.version>
-        <mysql-connector.version>8.0.18</mysql-connector.version>
+
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-io.version>2.4</commons-io.version>
         <springframework.version>5.2.2.RELEASE</springframework.version>
+
+        <mysql-connector.version>8.0.18</mysql-connector.version>
+        <dm-jdbc.version>8.1.1.193</dm-jdbc.version>
     </properties>
 
     <dependencies>
@@ -35,6 +38,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dameng</groupId>
+            <artifactId>DmJdbcDriver18</artifactId>
+            <version>${dm-jdbc.version}</version>
         </dependency>
 
         <dependency>
