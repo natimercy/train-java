@@ -17,7 +17,7 @@ public enum JavaType {
 
     FLOAT(-1f, Float.class.getName(), float.class.getName()),
 
-    DOUBLE(-1, Double.class.getName(), double.class.getName());
+    DOUBLE(-1d, Double.class.getName(), double.class.getName());
 
     private Object defaultValue;
 

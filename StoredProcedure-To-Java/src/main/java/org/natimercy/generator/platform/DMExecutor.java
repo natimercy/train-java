@@ -2,10 +2,11 @@ package org.natimercy.generator.platform;
 
 import com.mysql.cj.MysqlType;
 import org.apache.commons.lang3.StringUtils;
-import org.natimercy.generator.enums.JavaType;
-import org.natimercy.generator.util.DBManager;
 import org.natimercy.generator.entity.ProcedureParameter;
 import org.natimercy.generator.entity.TableMetaData;
+import org.natimercy.generator.enums.JavaType;
+import org.natimercy.generator.util.DBManager;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -70,36 +71,42 @@ public class DMExecutor {
         System.out.println("sql: " + sql);
         try {
             cs = dbManager.getConnection().prepareCall(sql);
-            cs.execute();
+            boolean result = cs.execute();
+            Assert.isTrue(result, "The first result is an update count or there is no result");
 
-            boolean next = true;
-            do {
-                if (next) {
-                    ResultSet resultSet = cs.getResultSet();
-                    while (resultSet.next()) {
-                        TableMetaData entityInfo = new TableMetaData();
-                        ResultSetMetaData metadata = resultSet.getMetaData();
-                        int columnCount = metadata.getColumnCount();
-                        if (columnCount <= 0) {
-                            break;
-                        }
 
-                        for (int i = 1; i <= columnCount; i++) {
-                            String columnName = metadata.getColumnName(i);
-                            entityInfo.setClassName(tableNameConverterClassName(columnName));
-                            entityInfo.getColumnNames().add(columnName.toLowerCase());
-                            String javaField = columnConverterField(columnName.toLowerCase());
-                            entityInfo.getFieldNames().add(javaField);
-                            int type = metadata.getColumnType(i);
-                            entityInfo.getFieldRelationMysqlType().put(javaField, MysqlType.getByJdbcType(type));
-                            entityInfo.getFieldRelationColumns().put(javaField, columnName);
-                            entityList.add(entityInfo);
-                        }
+            int index = 0;
+            while (result) {
+                ResultSet resultSet = cs.getResultSet();
+                if (resultSet != null) {
+                    TableMetaData entityInfo = new TableMetaData();
+                    ResultSetMetaData metadata = resultSet.getMetaData();
+                    int columnCount = metadata.getColumnCount();
+                    if (columnCount <= 0) {
+                        break;
                     }
+
+                    entityInfo.setClassName("class@" + index);
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = metadata.getColumnName(i);
+                        entityInfo.getColumnNames().add(columnName.toLowerCase());
+                        String javaField = columnConverterField(columnName.toLowerCase());
+                        entityInfo.getFieldNames().add(javaField);
+                        int type = metadata.getColumnType(i);
+                        entityInfo.getFieldRelationMysqlType().put(javaField, MysqlType.getByJdbcType(type));
+                        entityInfo.getFieldRelationColumns().put(javaField, columnName);
+                    }
+
+                    entityList.add(entityInfo);
                 }
 
-                next = cs.getMoreResults();
-            } while (next);
+                index += 1;
+                boolean next = cs.getMoreResults();
+                int updateCount = cs.getUpdateCount();
+                if (!next && updateCount == -1) {
+                    result = false;
+                }
+            }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
