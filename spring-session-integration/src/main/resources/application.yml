@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: spring-session-integration
+  redis:
+    host: 192.168.116.129
+    port: 6379
+    database: 0
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.116.129:3306/testDB
+  session:
+    store-type: jdbc

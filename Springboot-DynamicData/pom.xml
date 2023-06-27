@@ -78,10 +78,10 @@
             <version>0.9.1.2</version>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader</artifactId>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>commons-lang</groupId>
@@ -101,25 +101,36 @@
         </dependency>-->
 
         <!-- 引入fluent-mybatis 运行依赖包, scope为compile -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.atool</groupId>
             <artifactId>fluent-mybatis</artifactId>
             <version>${fluent-mybatis.version}</version>
         </dependency>
-        <!-- 引入fluent-mybatis-processor, scope设置为provider 编译需要，运行时不需要 -->
+        &lt;!&ndash; 引入fluent-mybatis-processor, scope设置为provider 编译需要，运行时不需要 &ndash;&gt;
         <dependency>
             <groupId>com.github.atool</groupId>
             <artifactId>fluent-mybatis-processor</artifactId>
             <scope>provided</scope>
             <version>${fluent-mybatis.version}</version>
         </dependency>
-
+-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
             <version>2.5.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts-core</artifactId>
+            <version>1.18.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.21</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -127,6 +138,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

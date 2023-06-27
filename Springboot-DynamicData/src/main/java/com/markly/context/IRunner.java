@@ -22,7 +22,7 @@ public class IRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("1111111111111" + Arrays.toString(args));
-        System.out.println(sysUserService.findUserByFirstDb(1L));
+        // System.out.println(sysUserService.findUserByFirstDb(1L));
     }
 
 }

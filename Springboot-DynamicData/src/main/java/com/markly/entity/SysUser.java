@@ -1,7 +1,5 @@
 package com.markly.entity;
 
-import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
-import cn.org.atool.fluent.mybatis.base.IEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -19,7 +17,6 @@ import java.time.LocalDateTime;
  * <p>
  * 系统用户
  * </p>
- *
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

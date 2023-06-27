@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-config
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        namespace: 63549f8d-a9b8-4ef1-8794-e12782b117e0
+        extension-configs:
+         - dataId: nacos-config.yaml
+           group: DEFAULT_GROUP
+           refresh: true
+        # - dataId: spring-cloud-config-student.yaml
+         #  group: DEFAULT_GROUP
+         #  refresh: true
+

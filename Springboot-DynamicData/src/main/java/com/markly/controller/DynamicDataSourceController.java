@@ -3,8 +3,6 @@ package com.markly.controller;
 import com.markly.entity.SysUser;
 import com.markly.service.SysUserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -18,7 +16,7 @@ import java.util.UUID;
 @Api("/1111")
 public class DynamicDataSourceController {
 
-    private SysUserService sysUserService;
+    private final SysUserService sysUserService;
 
     public DynamicDataSourceController(SysUserService sysUserService) {
         this.sysUserService = sysUserService;
