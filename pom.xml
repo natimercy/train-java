@@ -13,7 +13,6 @@
         <module>Springboot-DynamicData</module>
         <module>Cache-And-DistributedCache</module>
         <module>StoredProcedure-To-Java</module>
-        <module>spring-cloud-config-server</module>
         <module>spring-cloud-alibaba</module>
         <module>smpleJDBC-spring-boot-start</module>
         <module>spring-cloud</module>

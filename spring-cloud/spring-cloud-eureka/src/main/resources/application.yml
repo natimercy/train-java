@@ -11,5 +11,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 spring:
+  application:
+    name: spring-cloud-eureka
   main:
     allow-bean-definition-overriding: true
