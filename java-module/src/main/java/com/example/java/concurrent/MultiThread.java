@@ -1,4 +1,4 @@
-package com.example.interview.concurrent;
+package com.example.java.concurrent;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
