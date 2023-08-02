@@ -1,0 +1,11 @@
+server:
+  port: 7070
+spring:
+  application:
+    name: spring-data
+  data:
+    mongodb:
+      uri: mongodb://192.168.116.129:27017/test
+
+
+
