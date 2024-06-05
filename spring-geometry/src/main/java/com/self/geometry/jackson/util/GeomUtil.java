@@ -1,12 +1,13 @@
 package com.self.geometry.jackson.util;
 
-import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.locationtech.jts.io.*;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Geometry 工具类
@@ -82,7 +83,7 @@ public class GeomUtil {
             geometry.setSRID(readSRID(bytes));
             return geometry;
         } catch (Exception e) {
-            throw new DemoException("WKB -> Geometry ERR" + e.getMessage());
+            throw new RuntimeException("WKB -> Geometry ERR" + e.getMessage());
         }
     }
 
@@ -113,148 +114,6 @@ public class GeomUtil {
                 .putInt(geometry.getSRID())
                 .put(geomBytes)
                 .array();
-    }
-
-    public static List<List<Point>> convertGeometryToPoint(Geometry geometry) {
-        List<List<Point>> pointList = new ArrayList<>();
-
-        if (geometry != null && !geometry.isEmpty()) {
-            switch (geometry.getGeometryType()) {
-                case Geometry.TYPENAME_MULTIPOLYGON:
-                case Geometry.TYPENAME_POLYGON:
-                    pointList = getGeometryPoint(geometry);
-                    break;
-                case Geometry.TYPENAME_LINESTRING:
-                case Geometry.TYPENAME_MULTILINESTRING:
-                    pointList = buildLinePoint(geometry);
-                    break;
-                case Geometry.TYPENAME_POINT:
-                case Geometry.TYPENAME_MULTIPOINT:
-                    pointList = buildPoint(geometry);
-                    break;
-                default:
-            }
-        }
-
-        return pointList;
-    }
-
-    private static List<List<Point>> buildPoint(Geometry geometry) {
-        List<List<Point>> pointList = new ArrayList<>();
-        if (geometry != null && !geometry.isEmpty()) {
-            MultiPoint multiPoint;
-            Point point;
-
-            if (geometry instanceof MultiPoint) {
-                multiPoint = (MultiPoint) geometry;
-                int nums = multiPoint.getNumGeometries();
-                for (int i = 0; i < nums; i++) {
-                    Geometry g = multiPoint.getGeometryN(i);
-                    List<Point> Points = new ArrayList<>();
-                    Points.add(new Point(g.getCoordinate().x, g.getCoordinate().y));
-                    pointList.add(Points);
-
-                }
-            } else if (geometry instanceof Point) {
-                point = (Point) geometry;
-                List<Point> Points = new ArrayList<>();
-                Points.add(new Point(point.getCoordinate().x, point.getCoordinate().y));
-                pointList.add(Points);
-            }
-        }
-        return pointList;
-    }
-
-    private static List<List<Point>> buildLinePoint(Geometry geometry) {
-        List<List<Point>> pointList = new ArrayList<>();
-        if (geometry != null && !geometry.isEmpty()) {
-            MultiLineString multiLineString;
-            LineString lineString;
-
-            if (geometry instanceof MultiLineString) {
-                multiLineString = (MultiLineString) geometry;
-                int nums = multiLineString.getNumGeometries();
-                for (int i = 0; i < nums; i++) {
-                    buildPointList(pointList, new ArrayList<>(), (LineString) multiLineString.getGeometryN(i));
-
-                }
-            } else if (geometry instanceof LineString) {
-                lineString = (LineString) geometry;
-                buildPointList(pointList, new ArrayList<>(), lineString);
-            }
-        }
-        return pointList;
-    }
-
-    private static List<List<Point>> getGeometryPoint(Geometry geometry) {
-        List<List<Point>> pointList = new ArrayList<>();
-
-        if (geometry != null && !geometry.isEmpty()) {
-            MultiPolygon multiPolygon = null;
-            Polygon polygon = null;
-            if (geometry instanceof MultiPolygon) {
-                multiPolygon = (MultiPolygon) geometry;
-            }
-
-            if (geometry instanceof Polygon) {
-                polygon = (Polygon) geometry;
-            }
-
-            if (multiPolygon != null) {
-                getMultiPolygonPoint(pointList, multiPolygon);
-            }
-
-            if (polygon != null) {
-                getPolygonPoint(pointList, polygon);
-            }
-        }
-        return pointList;
-    }
-
-    private static void getMultiPolygonPoint(List<List<Point>> pointList, MultiPolygon multiPolygon) {
-        if (multiPolygon != null && !multiPolygon.isEmpty()) {
-            int geomNum = multiPolygon.getNumGeometries();
-
-            for (int i = 0; i < geomNum; ++i) {
-                Geometry geometry = multiPolygon.getGeometryN(i);
-                if (geometry instanceof MultiPolygon) {
-                    getMultiPolygonPoint(pointList, (MultiPolygon) geometry);
-                }
-
-                if (geometry instanceof Polygon) {
-                    getPolygonPoint(pointList, (Polygon) geometry);
-                }
-            }
-        }
-    }
-
-    private static void getPolygonPoint(List<List<Point>> pointList, Polygon polygon) {
-        if (polygon != null && !polygon.isEmpty()) {
-            int numInteriorRing = polygon.getNumInteriorRing();
-            if (numInteriorRing > 0) {
-                for (int i = 0; i < numInteriorRing; ++i) {
-                    List<Point> points = new ArrayList<>();
-                    LineString lineString = polygon.getInteriorRingN(i);
-                    buildPointList(pointList, points, lineString);
-                }
-            } else {
-                List<Point> points = new ArrayList<>();
-                LineString lineString = polygon.getExteriorRing();
-                buildPointList(pointList, points, lineString);
-            }
-        }
-    }
-
-    private static void buildPointList(List<List<Point>> pointList, List<Point> points, LineString lineString) {
-        Coordinate[] coordinates = lineString.getCoordinates();
-        for (Coordinate coordinate : coordinates) {
-            Point pDto = new Point();
-            pDto.setLat(coordinate.getY());
-            pDto.setLng(coordinate.getX());
-            points.add(pDto);
-        }
-
-        pointList.add(points);
     }
 
     /**
