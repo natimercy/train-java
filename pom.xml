@@ -20,7 +20,7 @@
         <module>spring-retry</module>
         <module>spring-geometry</module>
         <module>spring-session-integration</module>
-        <module>spring-boot</module>
+        <module>spring-boot</module><module>spring-boot-shardingjdbc</module>
     </modules>
 
     <properties>
