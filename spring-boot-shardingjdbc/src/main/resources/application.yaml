@@ -1,7 +1,12 @@
+server:
+  port: 9000
+
 spring:
   shardingsphere:
+    mode:
+      type: STANDALONE
     # 数据源配置
-    datasource:
+    data-source:
       # 数据源名称，多数据源以逗号分隔
       names: db0,db1
       db0:
@@ -9,13 +14,13 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://127.0.0.1:3306/shardingsphere-db1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         username: root
-        password: 123456
+        password:
       db1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://127.0.0.1:3306/shardingsphere-db0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         username: root
-        password: 123456
+        password:
     # 分片规则配置
     rules:
       sharding:
@@ -56,3 +61,23 @@ spring:
     props:
       # 展示修改以后的sql语句
       sql-show: true
+
+mybatis-plus:
+  # 搜索指定包别名
+  typeAliasesPackage: com.example
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 加载全局的配置文件
+  # configLocation: classpath:mybatis/mybatis-config.xml
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    # 驼峰下划线转换
+    map-underscore-to-camel-case: true
+    # 配置的缓存的全局开关
+    cache-enabled: true
+    # 延时加载的开关
+    lazy-loading-enabled: true
+    # 开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+    multiple-result-sets-enabled: true

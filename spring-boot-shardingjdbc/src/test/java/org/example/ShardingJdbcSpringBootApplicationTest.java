@@ -2,6 +2,7 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * ${NAME}
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @version 1.0.0
  */
 @SpringBootTest
+@PropertySource(value = {"classpath:application.yaml", "classpath:sharding-sphere.yaml"})
 public class ShardingJdbcSpringBootApplicationTest {
 
     @Test

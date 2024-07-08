@@ -6,7 +6,7 @@ import org.apache.shardingsphere.infra.config.algorithm.AlgorithmConfiguration;
 import org.apache.shardingsphere.sharding.api.config.ShardingRuleConfiguration;
 import org.apache.shardingsphere.sharding.api.config.rule.ShardingTableRuleConfiguration;
 import org.apache.shardingsphere.sharding.api.config.strategy.sharding.StandardShardingStrategyConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -18,13 +18,9 @@ import java.util.*;
  * @author <a href="mailto:natimercy93@gmail.com">natimercy</a>
  * @version 1.0.0
  */
+@Configuration
 public class ShardingConfiguration {
 
-    /**
-     * 配置分片数据源
-     * 公众号：程序员小富
-     */
-    @Bean
     public DataSource getShardingDataSource() throws SQLException {
         Map<String, DataSource> dataSourceMap = new HashMap<>();
         dataSourceMap.put("db0", dataSource1());
@@ -56,7 +52,7 @@ public class ShardingConfiguration {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/shardingsphere-db1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true");
         dataSource.setUsername("root");
-        dataSource.setPassword("123456");
+        dataSource.setPassword("");
         return dataSource;
     }
 
@@ -69,7 +65,7 @@ public class ShardingConfiguration {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/shardingsphere-db0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true");
         dataSource.setUsername("root");
-        dataSource.setPassword("123456");
+        dataSource.setPassword("");
         return dataSource;
     }
 
