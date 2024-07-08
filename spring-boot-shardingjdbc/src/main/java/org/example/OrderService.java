@@ -2,6 +2,8 @@ package org.example;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * OrderService
  *
@@ -9,5 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @version 1.0.0
  */
 public interface OrderService extends IService<Order> {
+
+    List<Order> getOrderList(Order order);
 
 }
