@@ -1,6 +1,7 @@
 package org.example;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.example.entity.Order;
 
 import java.util.List;
 
